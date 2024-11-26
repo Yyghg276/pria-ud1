@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class ITEM_BEHAVIOUR : MonoBehaviour
 {
+
+    public Game_Behaviour GameManager;
+
     void Start()
     {
-        
+        GameManager = GameObject.Find("GAME_MANAGER").GetComponent<Game_Behaviour>();
     }
 
     void Update()
@@ -20,6 +23,7 @@ public class ITEM_BEHAVIOUR : MonoBehaviour
         {
             Destroy(this.transform.parent.gameObject);
             Debug.Log("ITEM COLLECTED!");
+            GameManager.Items += 1;
         }
     }
 }

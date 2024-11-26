@@ -15,9 +15,18 @@ public class Player_Behaviour : MonoBehaviour
     public float JumpVelocity = 5f;
     private bool isJumping;
 
+    public float DistanceToGround = 0.1f;
+    public LayerMask GroundLayer;
+    private CapsuleCollider col;
+
+    public GameObject Bullet;
+    public float bullet_Speed = 100f;
+    private bool isShooting;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<CapsuleCollider>();
     }
 
     void Update()
@@ -25,6 +34,7 @@ public class Player_Behaviour : MonoBehaviour
         vertical_Input = Input.GetAxis("Vertical") * moveSpeed;
         horizontal_Input = Input.GetAxis("Horizontal") * rotateSpeed;
         isJumping |= Input.GetKeyDown(KeyCode.Space);
+        isShooting |= Input.GetKeyDown(KeyCode.Q);
     }
 
     void FixedUpdate()
@@ -43,6 +53,24 @@ public class Player_Behaviour : MonoBehaviour
             isJumping = false;
         }
 
+        if (isShooting)
+        {
+            GameObject newBullet = Instantiate(Bullet, this.transform.position + new Vector3(0, 0, 1), this.transform.rotation);
+            Rigidbody BulletRB = newBullet.GetComponent<Rigidbody>();
+            BulletRB.velocity = this.transform.forward * bullet_Speed;
+        }
+        else
+        {
+            isShooting = false;
+        }
     }
+
+    private bool IsGrounded()
+    {
+        Vector3 capsuleBottom = new Vector3(col.bounds.center.x, col.bounds.min.y, col.bounds.center.z);
+        bool grounded = Physics.CheckCapsule(col.bounds.center, capsuleBottom, DistanceToGround, GroundLayer, QueryTriggerInteraction.Ignore);
+        return grounded;
+    }
+
 
 }
