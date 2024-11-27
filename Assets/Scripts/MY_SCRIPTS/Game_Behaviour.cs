@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Game_Behaviour : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class Game_Behaviour : MonoBehaviour
     public TMP_Text item_Text;
     public TMP_Text progress_Text;
 
+    public Button win_Button;
+
     public int Items
     {
         get { return itemsCollected; }
@@ -25,6 +29,8 @@ public class Game_Behaviour : MonoBehaviour
             if (itemsCollected >= max_Items)
             {
                 progress_Text.text = "YOU'VE FOUND ALL THE ITEMS!";
+                win_Button.gameObject.SetActive(true);
+                Time.timeScale = 0f;
             }
             else
             {
@@ -47,6 +53,13 @@ public class Game_Behaviour : MonoBehaviour
             Debug.LogFormat("LIVES: {0}", playerHP);
         }
     }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+    }
+
 
 
     void Start()
